@@ -1,7 +1,7 @@
-import * as cp from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as assert from 'assert';
+const cp = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
 
 const projectRoot = process.cwd();
 const outputDir = path.join(projectRoot, 'test-output');
@@ -14,7 +14,7 @@ function cleanup() {
     }
 }
 
-function waitForServer(serverProcess: cp.ChildProcess): Promise<number> {
+function waitForServer(serverProcess) {
     return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
             reject(new Error('VitePress server startup timeout'));
@@ -39,7 +39,7 @@ function waitForServer(serverProcess: cp.ChildProcess): Promise<number> {
 }
 
 async function runTest() {
-    let serverProcess: cp.ChildProcess | null = null;
+    let serverProcess = null;
     try {
         cleanup();
 
@@ -55,7 +55,7 @@ async function runTest() {
 
         // 2. Run export-pdf command
         console.log('Running export-pdf command...');
-        cp.execSync(`node dist/export-pdf.js --url http://localhost:${port} --outDir ./test-output`);
+        cp.execSync(`node sources/export-pdf.js --url http://localhost:${port} --outDir ./test-output`);
 
         // 3. Assert that PDF is created
         console.log('Asserting PDF creation...');
