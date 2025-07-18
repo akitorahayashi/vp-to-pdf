@@ -1,0 +1,14 @@
+node_modules/
+.git/
+.DS_Store
+.env
+.idea/
+.vscode/
+pdf/
+.gitignore
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+README.md
+export-pdf.ts
+tsconfig.json 
