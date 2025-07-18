@@ -9,6 +9,6 @@ yarn-error.log
 .idea/
 .vscode/
 pdf/
-docs/.vitepress/cache
-docs/.vitepress/dist
+docs/.vitepress/cache/
+docs/.vitepress/dist/
 *.pdf

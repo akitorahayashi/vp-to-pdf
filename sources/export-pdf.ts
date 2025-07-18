@@ -2,52 +2,51 @@
 import puppeteer, { Browser } from 'puppeteer';
 import * as path from 'path';
 import * as fs from 'fs';
-
+import { URL } from 'url';
 
 (async () => {
     const args = process.argv.slice(2);
     let urlArg: string | undefined;
-    let outArg: string | undefined;
+    let outDirArg: string | undefined;
 
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--url' && args[i + 1]) {
             urlArg = args[i + 1];
             i++;
-        }
-        if (args[i] === '--out' && args[i + 1]) {
-            outArg = args[i + 1];
+        } else if (args[i] === '--outDir' && args[i + 1]) {
+            outDirArg = args[i + 1];
             i++;
         }
     }
 
     if (!urlArg) {
         console.error('ページURL(--url)を指定してください。');
-        console.error('例: npx export-pdf --url http://localhost:5173/apple-ecosystem/index.html --out ./output.pdf');
-        process.exit(1);
-    }
-
-    if (!outArg) {
-        console.error('出力パス(--out)を指定してください。');
-        console.error('例: npx export-pdf --url http://localhost:5173/apple-ecosystem/index.html --out ./output.pdf');
+        console.error('例: npx export-pdf --url http://localhost:5173/index.html --outDir ./pdf');
         process.exit(1);
     }
 
     const targetUrl: string = urlArg;
-    const outPath: string = outArg;
 
-    // PDF出力パスを生成
-    const projectRoot: string = process.cwd();
-    const pdfPath: string = path.isAbsolute(outPath) ? outPath : path.join(projectRoot, outPath);
+    const url = new URL(targetUrl);
+    let pdfName = path.basename(url.pathname);
+    if (pdfName === '' || pdfName === '/') {
+        pdfName = 'index.pdf';
+    } else if (pdfName.endsWith('.html')) {
+        pdfName = pdfName.replace('.html', '.pdf');
+    } else {
+        pdfName = `${pdfName}.pdf`;
+    }
+
+    const outDir = outDirArg ? path.resolve(process.cwd(), outDirArg) : process.cwd();
+    const pdfPath: string = path.join(outDir, pdfName);
 
     console.log(`PuppeteerでアクセスするURL: ${targetUrl}`);
     console.log(`PDFの出力先: ${pdfPath}`);
 
     let browser: Browser | undefined;
     try {
-        // PDF出力先ディレクトリ作成
-        const pdfDir: string = path.dirname(pdfPath);
-        if (!fs.existsSync(pdfDir)) {
-            fs.mkdirSync(pdfDir, { recursive: true });
+        if (!fs.existsSync(outDir)) {
+            fs.mkdirSync(outDir, { recursive: true });
         }
 
         console.log('Puppeteerを起動');
@@ -58,17 +57,14 @@ import * as fs from 'fs';
 
         console.log('ページの作成');
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(30000); // 30秒
+        await page.setDefaultNavigationTimeout(30000);
 
         console.log(`ページの移動: ${targetUrl}`);
         await page.goto(targetUrl, {
             waitUntil: 'load'
         });
 
-        // 印刷用スタイル
         await page.emulateMediaType('print');
-
-        // VitePressコンテンツの表示を待つ
         await page.waitForSelector('.VPContent', { visible: true, timeout: 30000 });
 
         console.log(`PDFを生成: ${pdfPath}`);

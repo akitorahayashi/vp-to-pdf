@@ -11,4 +11,6 @@ yarn-debug.log
 yarn-error.log
 README.md
 export-pdf.ts
-tsconfig.json 
+tsconfig.json
+docs/.vitepress/dist/
+docs/.vitepress/cache/
