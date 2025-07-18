@@ -13,8 +13,7 @@ import * as fs from 'fs';
         if (args[i] === '--url' && args[i + 1]) {
             urlArg = args[i + 1];
             i++;
-        }
-        if (args[i] === '--out' && args[i + 1]) {
+        } else if (args[i] === '--out' && args[i + 1]) {
             outArg = args[i + 1];
             i++;
         }
