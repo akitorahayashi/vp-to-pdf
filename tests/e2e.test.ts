@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as assert from 'assert';
 
 const projectRoot = process.cwd();
-const docsDir = path.join(projectRoot, 'docs');
 const pdfPath = path.join(projectRoot, 'test-doc.pdf');
 
 function cleanup() {
@@ -14,22 +13,41 @@ function cleanup() {
     }
 }
 
+function waitForServer(serverProcess: cp.ChildProcess): Promise<number> {
+    return new Promise((resolve, reject) => {
+        serverProcess.stdout?.on('data', (data) => {
+            const output = data.toString();
+            console.log(output);
+            const match = output.match(/http:\/\/localhost:(\d+)/);
+            if (match) {
+                const port = parseInt(match[1], 10);
+                resolve(port);
+            }
+        });
+
+        serverProcess.stderr?.on('data', (data) => {
+            console.error(data.toString());
+            reject(new Error('VitePress server failed to start'));
+        });
+    });
+}
+
 async function runTest() {
     let serverProcess: cp.ChildProcess | null = null;
     try {
         // 1. Start VitePress dev server
         console.log('Starting VitePress dev server...');
-        serverProcess = cp.spawn('npx', ['vitepress', 'dev', 'docs'], {
-            stdio: 'inherit',
+        serverProcess = cp.spawn('npx', ['vitepress', 'dev', 'docs', '--port', '0'], {
+            stdio: 'pipe',
             shell: true,
         });
 
-        // Wait for server to be ready
-        await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10s for server to start
+        const port = await waitForServer(serverProcess);
+        console.log(`VitePress server started on port ${port}`);
 
         // 2. Run export-pdf command
         console.log('Running export-pdf command...');
-        cp.execSync(`node dist/export-pdf.js --url http://localhost:5173 --out ${pdfPath}`);
+        cp.execSync(`node dist/export-pdf.js --url http://localhost:${port} --out ${pdfPath}`);
 
         // 3. Assert that PDF is created
         console.log('Asserting PDF creation...');
