@@ -1,9 +1,9 @@
 {
   "name": "export-pdf",
   "version": "1.0.0",
-  "main": "dist/sources/export-pdf.js",
+  "main": "dist/export-pdf.js",
   "bin": {
-    "export-pdf": "dist/sources/export-pdf.js"
+    "export-pdf": "dist/export-pdf.js"
   },
   "files": [
     "dist"
