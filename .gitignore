@@ -8,4 +8,7 @@ yarn-debug.log
 yarn-error.log
 .idea/
 .vscode/
-pdf/ 
+pdf/
+docs/.vitepress/cache
+docs/.vitepress/dist
+*.pdf

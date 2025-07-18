@@ -1,9 +1,16 @@
 {
   "name": "export-pdf",
   "version": "1.0.0",
-  "main": "./dist/export-pdf.js",
+  "main": "dist/export-pdf.js",
   "bin": {
-    "export-pdf": "./dist/export-pdf.js"
+    "export-pdf": "dist/export-pdf.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "ts-node tests/e2e.test.ts"
   },
   "dependencies": {
     "puppeteer": "^24.13.0",

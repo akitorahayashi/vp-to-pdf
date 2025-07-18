@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2020",
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
+    "rootDir": "./sources",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "**/*.ts"
+    "sources/**/*.ts"
   ]
 }
