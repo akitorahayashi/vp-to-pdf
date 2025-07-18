@@ -6,18 +6,15 @@ const { URL } = require('url');
 
 (async () => {
     const args = process.argv.slice(2);
-    let urlArg;
-    let outDirArg;
-
+    const argMap = new Map();
     for (let i = 0; i < args.length; i++) {
-        if (args[i] === '--url' && args[i + 1]) {
-            urlArg = args[i + 1];
-            i++;
-        } else if (args[i] === '--outDir' && args[i + 1]) {
-            outDirArg = args[i + 1];
+        if (args[i].startsWith('--') && args[i + 1] && !args[i + 1].startsWith('--')) {
+            argMap.set(args[i], args[i + 1]);
             i++;
         }
     }
+    const urlArg = argMap.get('--url');
+    const outDirArg = argMap.get('--outDir');
 
     if (!urlArg) {
         console.error('ページURL(--url)を指定してください。');
@@ -29,11 +26,11 @@ const { URL } = require('url');
 
     const url = new URL(targetUrl);
     let pdfName = path.basename(url.pathname);
-    if (pdfName === '' || pdfName === '/') {
+    if (!pdfName || pdfName === '' || pdfName === '/') {
         pdfName = 'index.pdf';
     } else if (pdfName.endsWith('.html')) {
         pdfName = pdfName.replace('.html', '.pdf');
-    } else {
+    } else if (!pdfName.endsWith('.pdf')) {
         pdfName = `${pdfName}.pdf`;
     }
 
