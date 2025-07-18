@@ -20,6 +20,7 @@ npx export-pdf --url <URL> [--outDir <出力ディレクトリ>]
 - `--url` (必須) ... PDF化したいページのURL（例: `http://localhost:5173/index.html`）
 - `--outDir` (任意) ... PDFの出力先ディレクトリ。相対パス、絶対パスのどちらも指定可能です。指定しない場合は、コマンドを実行したカレントディレクトリに出力されます。（例: `./pdf-output`）
 
+
 ### 実行例
 
 ```bash

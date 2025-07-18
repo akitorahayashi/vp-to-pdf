@@ -19,7 +19,6 @@ function waitForServer(serverProcess: cp.ChildProcess): Promise<number> {
         const timeout = setTimeout(() => {
             reject(new Error('VitePress server startup timeout'));
         }, 30000); // 30秒のタイムアウト
-
         serverProcess.stdout?.on('data', (data) => {
             const output = data.toString();
             console.log(output);
