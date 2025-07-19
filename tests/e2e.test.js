@@ -21,7 +21,7 @@ async function runTest() {
 
         // 1. Run export-pdf command
         console.log('Running export-pdf command...');
-        cp.execSync(`node sources/export-pdf.js --url http://localhost:${port} --outDir ./test-output`);
+        cp.execSync(`npx vp-to-pdf --url http://localhost:${port} --outDir ./test-output`);
 
         // 2. Assert that PDF is created
         console.log('Asserting PDF creation...');
@@ -31,11 +31,13 @@ async function runTest() {
         // 3. Run export-pdf without outDir (should create index.pdf in cwd)
         const cwdPdfPath = path.join(projectRoot, 'index.pdf');
         console.log('Running export-pdf command without outDir...');
-        cp.execSync(`node sources/export-pdf.js --url http://localhost:${port}`);
+        cp.execSync(`npx vp-to-pdf --url http://localhost:${port}`);
+
         // 4. Assert that PDF is created in cwd
         console.log('Asserting PDF creation in cwd...');
         assert.ok(fs.existsSync(cwdPdfPath), 'PDF file should be created in cwd');
         console.log('PDF created in cwd successfully.');
+
         // 5. Delete the created PDF in cwd
         fs.unlinkSync(cwdPdfPath);
         console.log('PDF in cwd deleted.');

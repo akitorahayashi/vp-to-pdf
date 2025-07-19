@@ -12,7 +12,7 @@
 VitePressサーバーが起動している状態で、プロジェクトのルートディレクトリから以下のコマンドを実行します。
 
 ```bash
-npx export-pdf --url <URL> [--outDir <出力ディレクトリ>]
+npx export-pdf --url <URL> --outDir <出力ディレクトリ>
 ```
 
 ### オプション

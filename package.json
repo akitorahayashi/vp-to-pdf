@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "sources/export-pdf.js",
   "bin": {
-    "export-pdf": "sources/export-pdf.js"
+    "vp-to-pdf": "sources/export-pdf.js"
   },
   "files": [
     "sources"
