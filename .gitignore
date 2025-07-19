@@ -12,3 +12,4 @@ pdf/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
 *.pdf
+test-output/

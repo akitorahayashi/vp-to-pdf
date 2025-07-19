@@ -1,4 +1,4 @@
-name: CI
+name: Vitepress to PDF CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +20,20 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Install docs dependencies
+        run: |
+          cd docs
+          npm install
 
       - name: Test
-        run: npm test
+        run: |
+          export PATH="$PWD/docs/node_modules/.bin:$PATH"
+          nohup npx vitepress dev docs --port 5173 > vp-server.log 2>&1 &
+          for i in {1..30}; do
+            nc -z localhost 5173 && break
+            sleep 1
+          done
+          export VITEPRESS_PORT=5173
+          npm test

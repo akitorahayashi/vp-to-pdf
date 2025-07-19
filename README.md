@@ -39,3 +39,21 @@ PDFファイルは、`--outDir`で指定されたディレクトリ、または�
 - `http://localhost:5173/` -> `index.pdf`
 - `http://localhost:5173/guide/` -> `guide.pdf`
 - `http://localhost:5173/guide/getting-started.html` -> `getting-started.pdf`
+
+## ローカルでテストを実行する方法
+
+1. まずVitePressサーバーを起動します（例: ポート5173で起動）。
+
+```bash
+cd docs
+npx vitepress dev --port 5173
+```
+
+2. 別のターミナルで、環境変数 `VITEPRESS_PORT` を指定してテストを実行します。
+
+```bash
+export VITEPRESS_PORT=5173
+npm test
+```
+
+---
