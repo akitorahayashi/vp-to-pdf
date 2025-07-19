@@ -28,6 +28,18 @@ async function runTest() {
         assert.ok(fs.existsSync(pdfPath), 'PDF file should be created');
         console.log('PDF created successfully.');
 
+        // 3. Run export-pdf without outDir (should create index.pdf in cwd)
+        const cwdPdfPath = path.join(projectRoot, 'index.pdf');
+        console.log('Running export-pdf command without outDir...');
+        cp.execSync(`node sources/export-pdf.js --url http://localhost:${port}`);
+        // 4. Assert that PDF is created in cwd
+        console.log('Asserting PDF creation in cwd...');
+        assert.ok(fs.existsSync(cwdPdfPath), 'PDF file should be created in cwd');
+        console.log('PDF created in cwd successfully.');
+        // 5. Delete the created PDF in cwd
+        fs.unlinkSync(cwdPdfPath);
+        console.log('PDF in cwd deleted.');
+
     } catch (error) {
         console.error('Test failed:', error);
         process.exit(1);
